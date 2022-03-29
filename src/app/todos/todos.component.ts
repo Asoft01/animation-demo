@@ -1,4 +1,4 @@
-import { animate, keyframes, state, style, transition, trigger, useAnimation } from '@angular/animations';
+import { animate, animateChild, group, keyframes, query, stagger, state, style, transition, trigger, useAnimation } from '@angular/animations';
 import { bounceOutLeftAnimation, fade, slide, fadeInAnimation } from './../animations';
 // import { animate, state, style, transition, trigger } from '@angular/animations';
 import { Component } from '@angular/core';
@@ -31,6 +31,39 @@ import { Component } from '@angular/core';
     // fade
     // slide
 
+    trigger('todosAnimation', [
+      transition(':enter', [
+        // group([
+        //   animate(1000, style({ background: 'red'} )),
+        //   animate(2000, style({ transform: 'translateY(50px)'}))
+        // ])
+        ////////////////////////////////////////////////////////
+        group([
+          query('h1', [
+            style({ transform: 'translateY(-20px)' }), 
+            animate(1000)
+          ]),
+          // query('@todoAnimation', animateChild())
+          // query('@todoAnimation', 
+          // query('.list-group-item',
+          // stagger(200, [
+          //   style({ opacity: 0, transform: 'translateX(-20px) '}),
+          //   animate(1000)
+          // ]))
+
+          query('@todoAnimation', stagger(200, animateChild()))
+        ]),
+
+        ////////////////////////////////////
+        // query('h1', [
+        //   style({ transform: 'translateY(-20px)' }), 
+        //   animate(1000)
+        // ]),
+        // query('@todoAnimation', animateChild())
+      ])
+    ]),
+
+
     trigger('todoAnimation', [
       transition(':enter', [
         // style({ opacity: 0 }),
@@ -45,7 +78,7 @@ import { Component } from '@angular/core';
         style({ backgroundColor: 'red' }),
         animate(1000),
         useAnimation(bounceOutLeftAnimation)
-      ])
+      ]),
     ])
   ]
 })
@@ -64,4 +97,7 @@ export class TodosComponent {
     let index = this.items.indexOf(item);
     this.items.splice(index, 1);
   }
+
+  animationStarted($event) { console.log($event); }
+  animationDone($event) { console.log($event); }
 }
